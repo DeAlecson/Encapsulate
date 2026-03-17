@@ -1,0 +1,55 @@
+{
+  "id": "su5",
+  "title": "Python GUI",
+  "unit": "su5",
+  "difficulty": 3,
+  "sections": [
+    {
+      "type": "intro",
+      "title": "Building graphical interfaces",
+      "content": "ICT162 uses **tkinter**, Python's built-in GUI library. You will learn to build simple forms with labels, text fields, buttons, and output areas.\n\nThe exam typically gives you a partial GUI and asks you to write callbacks (the functions that run when a button is clicked)."
+    },
+    {
+      "type": "definition",
+      "title": "tkinter basics",
+      "content": "```python\nimport tkinter as tk\nfrom tkinter import ttk\n```\n\n**Key widgets:**\n- `tk.Tk()` — the main window\n- `ttk.Label(parent, text='...')` — displays text\n- `ttk.Entry(parent, width=N)` — a text input field\n- `ttk.Button(parent, text='...', command=callback)` — a clickable button\n- `scrolledtext.ScrolledText(parent, ...)` — a multi-line text output area\n\n**Layout with grid:**\n```python\nlabel.grid(row=0, column=0)\nentry.grid(row=0, column=1)\n```"
+    },
+    {
+      "type": "worked_example",
+      "title": "Worked example: Temperature converter",
+      "content": "```python\nimport tkinter as tk\nfrom tkinter import ttk\n\nclass TempConverterGUI:\n    def __init__(self):\n        self._win = tk.Tk()\n        self._win.title('Temp Converter')\n        self.create_widgets()\n        self._win.mainloop()\n\n    def create_widgets(self):\n        ttk.Label(self._win, text='Celsius:').grid(row=0, column=0)\n        self._celsius_ety = ttk.Entry(self._win, width=10)\n        self._celsius_ety.grid(row=0, column=1)\n\n        ttk.Button(self._win, text='Convert',\n                   command=self.convert).grid(row=1, column=0)\n\n        self._result_lbl = ttk.Label(self._win, text='')\n        self._result_lbl.grid(row=1, column=1)\n\n    def convert(self):\n        try:\n            c = float(self._celsius_ety.get())\n            f = c * 9/5 + 32\n            self._result_lbl.config(text=f'{f:.1f} F')\n        except ValueError:\n            self._result_lbl.config(text='Invalid input')\n\nTempConverterGUI()\n```\n\nNotice the pattern: create widgets in one method, write callbacks in another."
+    },
+    {
+      "type": "definition",
+      "title": "Reading and writing widgets",
+      "content": "**Read** from an Entry:\n```python\ntext = self._entry.get()        # returns a string\nvalue = float(self._entry.get())  # convert to number\n```\n\n**Write** to a Label:\n```python\nself._label.config(text='New text here')\n```\n\n**Write** to a ScrolledText:\n```python\nself._scrolled.delete('1.0', tk.END)   # clear it\nself._scrolled.insert(tk.END, 'Hello')  # add text\n```\n\n**Clear** an Entry:\n```python\nself._entry.delete(0, tk.END)\n```"
+    },
+    {
+      "type": "checkpoint",
+      "title": "Quick check",
+      "content": "How do you read text from an Entry widget?",
+      "question": {
+        "type": "mcq",
+        "prompt": "Which method reads the text typed into a tkinter Entry widget?",
+        "choices": [
+          "self._entry.read()",
+          "self._entry.get()",
+          "self._entry.text()",
+          "self._entry.value()"
+        ],
+        "answer": 1,
+        "explanation": "The .get() method reads the current text from an Entry widget. It always returns a string, so you may need to convert it with int() or float()."
+      }
+    },
+    {
+      "type": "definition",
+      "title": "Button callbacks and validation",
+      "content": "A **callback** is a method that runs when a button is clicked:\n\n```python\nttk.Button(parent, text='Add', command=self.addContact)\n```\n\nInside the callback, always validate inputs and handle exceptions:\n\n```python\ndef addContact(self):\n    name = self._name_ety.get().strip()\n    number = self._num_ety.get().strip()\n    if not name or not number:\n        self._output.insert(tk.END, 'Fields cannot be empty\\n')\n        return\n    try:\n        self._phonebook.addContact(Contact(name, number))\n        self._output.insert(tk.END, 'Contact added\\n')\n    except InvalidContactException as e:\n        self._output.insert(tk.END, str(e) + '\\n')\n```\n\nThis pattern — read, validate, try, catch — appears in almost every ICT162 GUI question."
+    },
+    {
+      "type": "summary",
+      "title": "Unit 5 summary",
+      "content": "Key takeaways:\n\n- Import `tkinter as tk` and `from tkinter import ttk`\n- The main window is `tk.Tk()` with `mainloop()` to keep it running\n- Use `.grid(row, column)` for layout\n- `.get()` reads from Entry; `.config(text=...)` writes to Label\n- Callbacks connect buttons to methods: `command=self.myMethod`\n- Always validate inputs and catch exceptions in callbacks\n- ScrolledText uses `insert(tk.END, ...)` and `delete('1.0', tk.END)`\n\nNext: **SOLID & Design** — writing clean, maintainable code."
+    }
+  ]
+}

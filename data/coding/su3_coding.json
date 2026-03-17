@@ -1,0 +1,45 @@
+{
+  "unitId": "su3",
+  "tasks": [
+    {
+      "id": "su3_c1",
+      "type": "write_class",
+      "concept": "child class with super()",
+      "prompt": "Write a MemberCashCard class that inherits from CashCard.\n\nRequirements:\n- Extra instance variable: points (int, default 0)\n- Constructor calls super().__init__(id, amount) then sets points\n- @property getter for points\n- An earnPoints(amount) method that adds int(amount) to points\n- Override topUp: call super().topUp(amount) then call earnPoints(amount)\n\nAssume CashCard already exists with __init__(self, id, amount) and topUp(self, amount).",
+      "difficulty": 3,
+      "starterCode": "class MemberCashCard(CashCard):\n    def __init__(self, id, amount, points=0):\n        # your code here\n        pass\n\n    # add property, earnPoints, topUp override",
+      "modelAnswer": "class MemberCashCard(CashCard):\n    def __init__(self, id, amount, points=0):\n        super().__init__(id, amount)\n        self.__points = points\n\n    @property\n    def points(self):\n        return self.__points\n\n    def earnPoints(self, amount):\n        self.__points += int(amount)\n\n    def topUp(self, amount):\n        super().topUp(amount)\n        self.earnPoints(amount)",
+      "expectedKeyPoints": ["inherits from CashCard", "super().__init__", "extra __points variable", "property for points", "earnPoints method", "topUp overrides by refinement"],
+      "hintLadder": ["Use super().__init__(id, amount) to call the parent constructor", "self.__points = points stores the new variable", "topUp calls super().topUp(amount) first, then self.earnPoints(amount)"],
+      "commonMistakes": ["Forgetting super().__init__()", "Not calling super().topUp() in the overridden topUp", "Using self.__init__ instead of super().__init__"],
+      "checks": [
+        { "type": "pattern", "value": "class MemberCashCard\\(CashCard\\)", "label": "Inherits from CashCard" },
+        { "type": "keyword", "value": "super().__init__", "label": "Calls parent constructor" },
+        { "type": "keyword", "value": "self.__points", "label": "Extra instance variable" },
+        { "type": "keyword", "value": "@property", "label": "Property decorator" },
+        { "type": "keyword", "value": "def earnPoints", "label": "EarnPoints method" },
+        { "type": "keyword", "value": "super().topUp", "label": "Calls parent topUp (refinement)" }
+      ]
+    },
+    {
+      "id": "su3_c2",
+      "type": "write_class",
+      "concept": "abstract class",
+      "prompt": "Write an abstract Shape class using ABC.\n\nRequirements:\n- Import ABC and abstractmethod from abc module\n- Shape inherits from ABC\n- Two abstract methods: area() and perimeter() (both use pass)\n- A concrete describe() method that returns 'Shape with area: <area>'",
+      "difficulty": 3,
+      "starterCode": "from abc import ABC, abstractmethod\n\nclass Shape(ABC):\n    # your code here\n    pass",
+      "modelAnswer": "from abc import ABC, abstractmethod\n\nclass Shape(ABC):\n    @abstractmethod\n    def area(self):\n        pass\n\n    @abstractmethod\n    def perimeter(self):\n        pass\n\n    def describe(self):\n        return f'Shape with area: {self.area()}'",
+      "expectedKeyPoints": ["import ABC", "inherits from ABC", "@abstractmethod", "area with pass", "perimeter with pass", "concrete describe method"],
+      "hintLadder": ["class Shape(ABC): — inherits from ABC", "Place @abstractmethod above each abstract method", "Use pass as the body for abstract methods", "describe() can call self.area() even though it is abstract"],
+      "commonMistakes": ["Forgetting to inherit from ABC", "Not using @abstractmethod decorator", "Trying to put code inside abstract methods"],
+      "checks": [
+        { "type": "keyword", "value": "from abc import", "label": "Imports ABC" },
+        { "type": "pattern", "value": "class Shape\\(ABC\\)", "label": "Inherits from ABC" },
+        { "type": "keyword", "value": "@abstractmethod", "label": "Abstract decorator" },
+        { "type": "keyword", "value": "def area", "label": "Area method" },
+        { "type": "keyword", "value": "def perimeter", "label": "Perimeter method" },
+        { "type": "keyword", "value": "def describe", "label": "Concrete method" }
+      ]
+    }
+  ]
+}

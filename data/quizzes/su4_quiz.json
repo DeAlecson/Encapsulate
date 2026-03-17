@@ -1,0 +1,40 @@
+{
+  "unitId": "su4",
+  "questions": [
+    {
+      "id": "su4_q1", "type": "mcq", "concept": "error types", "difficulty": 1,
+      "prompt": "A missing colon at the end of a def statement is what type of error?",
+      "choices": ["Runtime error", "Logic error", "Syntax error", "Exception"],
+      "answer": 2,
+      "explanation": "A missing colon is a syntax error. Python catches these before the program runs."
+    },
+    {
+      "id": "su4_q2", "type": "mcq", "concept": "try/except", "difficulty": 2,
+      "prompt": "In a try/except/else block, when does the else block run?",
+      "choices": ["When an exception occurs", "Only when no exception occurs", "Always", "Before the try block"],
+      "answer": 1,
+      "explanation": "The else block runs only when the try block completes without any exception."
+    },
+    {
+      "id": "su4_q3", "type": "mcq", "concept": "custom exception", "difficulty": 2,
+      "prompt": "Which is the correct way to define a custom exception?",
+      "choices": ["class MyError: pass", "class MyError(Exception): pass", "def MyError(): pass", "raise MyError"],
+      "answer": 1,
+      "explanation": "A custom exception must inherit from Exception: class MyError(Exception): pass"
+    },
+    {
+      "id": "su4_q4", "type": "mcq", "concept": "raise keyword", "difficulty": 2,
+      "prompt": "What does the raise keyword do?",
+      "choices": ["Catches an exception", "Throws an exception deliberately", "Imports a module", "Defines a class"],
+      "answer": 1,
+      "explanation": "The raise keyword throws (raises) an exception deliberately when a rule is broken, like insufficient balance."
+    },
+    {
+      "id": "su4_q5", "type": "mcq", "concept": "finally block", "difficulty": 2,
+      "prompt": "When does the finally block execute?",
+      "choices": ["Only when there is no exception", "Only when there is an exception", "Always, whether or not an exception occurs", "Only when raise is used"],
+      "answer": 2,
+      "explanation": "The finally block always executes, regardless of whether an exception occurred. It is used for cleanup tasks."
+    }
+  ]
+}

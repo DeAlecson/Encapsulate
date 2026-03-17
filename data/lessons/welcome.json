@@ -1,0 +1,50 @@
+{
+  "id": "welcome",
+  "title": "Getting Started with Encapsulate",
+  "unit": "welcome",
+  "difficulty": 1,
+  "sections": [
+    {
+      "type": "intro",
+      "title": "Welcome to Encapsulate",
+      "content": "This app is your personal coach for ICT162 Object Oriented Programming.\n\nYou will learn Python OOP step by step, starting from the very basics and building up to exam-level questions.\n\nEach lesson is short. You can stop anytime and pick up where you left off."
+    },
+    {
+      "type": "definition",
+      "title": "What is OOP?",
+      "content": "OOP stands for Object Oriented Programming. It is a way of writing code where you group related data and actions together into things called **objects**.\n\nThink of it like this: a real-world \"cash card\" has a card number and a balance. In OOP, you would create a CashCard object that stores those same things."
+    },
+    {
+      "type": "definition",
+      "title": "What you will cover",
+      "content": "ICT162 covers six main topics:\n\n1. **Classes & Objects** — the core building blocks\n2. **Composition & Collection** — objects inside objects, and lists of objects\n3. **Inheritance** — child classes that extend parent classes\n4. **Exception Handling** — dealing with errors gracefully\n5. **Python GUI** — building simple graphical interfaces with tkinter\n6. **SOLID Principles** — writing clean, maintainable designs"
+    },
+    {
+      "type": "example",
+      "title": "How lessons work",
+      "content": "Each lesson has:\n\n- **Explanations** in plain language\n- **Code examples** you can study\n- **Quick checks** to test your understanding\n- **Practice prompts** where you try writing code\n\nYou earn XP for completing sections and answering questions. Your progress is saved automatically."
+    },
+    {
+      "type": "checkpoint",
+      "title": "Quick check",
+      "content": "What does OOP stand for?",
+      "question": {
+        "type": "mcq",
+        "prompt": "What does OOP stand for?",
+        "choices": [
+          "Object Oriented Programming",
+          "Online Output Processing",
+          "Operator Overloading Protocol",
+          "Open Object Platform"
+        ],
+        "answer": 0,
+        "explanation": "OOP stands for Object Oriented Programming. It is a programming style where you organise code around objects that combine data and behaviour."
+      }
+    },
+    {
+      "type": "summary",
+      "title": "You are ready",
+      "content": "That is it for the introduction. Next up: **Classes & Objects**, where you will learn how to define your first Python class.\n\nTip: You can always come back to any lesson from the dashboard or the Study Units page."
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "unitId": "su1",
+  "questions": [
+    {
+      "id": "su1_q1",
+      "type": "mcq",
+      "concept": "constructor",
+      "prompt": "What is the name of the constructor method in Python?",
+      "difficulty": 1,
+      "choices": ["__init__", "__str__", "__main__", "__new__"],
+      "answer": 0,
+      "explanation": "The constructor in Python is called __init__. It runs automatically when you create a new object using ClassName().",
+      "commonMistakes": ["Confusing __init__ with __str__", "Forgetting the double underscores"]
+    },
+    {
+      "id": "su1_q2",
+      "type": "mcq",
+      "concept": "self keyword",
+      "prompt": "What does 'self' refer to inside a class method?",
+      "difficulty": 1,
+      "choices": [
+        "The class itself",
+        "The current object (instance)",
+        "The parent class",
+        "The main function"
+      ],
+      "answer": 1,
+      "explanation": "'self' is a reference to the current object (the specific instance the method is being called on). Every instance method must have 'self' as its first parameter.",
+      "commonMistakes": ["Thinking self refers to the class, not the object"]
+    },
+    {
+      "id": "su1_q3",
+      "type": "mcq",
+      "concept": "property decorator",
+      "prompt": "What does the @property decorator do?",
+      "difficulty": 2,
+      "choices": [
+        "Makes a variable public",
+        "Turns a method into a getter that can be accessed like an attribute",
+        "Deletes a variable",
+        "Makes a method private"
+      ],
+      "answer": 1,
+      "explanation": "The @property decorator turns a method into a getter. Instead of calling obj.name(), you can access it as obj.name (without parentheses).",
+      "commonMistakes": ["Thinking @property makes things public — it provides controlled read access"]
+    },
+    {
+      "id": "su1_q4",
+      "type": "output_prediction",
+      "concept": "object creation and methods",
+      "prompt": "What is the output of this code?\n\nclass Dice:\n    def __init__(self, value=1):\n        self.__value = value\n\n    @property\n    def value(self):\n        return self.__value\n\n    def __str__(self):\n        return f'Dice: {self.__value}'\n\nd = Dice(5)\nprint(d)\nprint(d.value)",
+      "difficulty": 2,
+      "choices": [
+        "Dice: 5\\n5",
+        "Dice: 1\\n1",
+        "<Dice object>\\n5",
+        "5\\nDice: 5"
+      ],
+      "answer": 0,
+      "explanation": "Dice(5) creates a dice with value=5. print(d) calls __str__ which returns 'Dice: 5'. print(d.value) calls the @property getter which returns 5.",
+      "commonMistakes": ["Forgetting that print(d) calls __str__", "Thinking default value 1 is used when 5 is passed"]
+    },
+    {
+      "id": "su1_q5",
+      "type": "mcq",
+      "concept": "encapsulation",
+      "prompt": "What does the double underscore prefix (__) do to a variable in Python?",
+      "difficulty": 2,
+      "choices": [
+        "Makes it a global variable",
+        "Makes it a class variable",
+        "Triggers name mangling to make it private",
+        "Makes it a constant"
+      ],
+      "answer": 2,
+      "explanation": "The double underscore prefix (like self.__value) triggers Python's name mangling. This makes the variable harder to access from outside the class, enforcing encapsulation.",
+      "commonMistakes": ["Thinking __ makes it completely inaccessible (it is still accessible via _ClassName__variable)"]
+    },
+    {
+      "id": "su1_q6",
+      "type": "mcq",
+      "concept": "class variables",
+      "prompt": "Where is a class variable defined?",
+      "difficulty": 2,
+      "choices": [
+        "Inside the __init__ method with self",
+        "Inside the class but outside any method",
+        "Outside the class entirely",
+        "Inside the __str__ method"
+      ],
+      "answer": 1,
+      "explanation": "Class variables are defined inside the class body but outside any method. They are shared by all objects of that class. Instance variables use self and are defined inside methods (usually __init__).",
+      "commonMistakes": ["Confusing class variables with instance variables"]
+    },
+    {
+      "id": "su1_q7",
+      "type": "output_prediction",
+      "concept": "default parameters",
+      "prompt": "What is the output?\n\nclass CashCard:\n    def __init__(self, id, amount=20):\n        self._id = id\n        self._balance = amount\n\n    @property\n    def balance(self):\n        return self._balance\n\nc1 = CashCard('A1', 50)\nc2 = CashCard('A2')\nprint(c1.balance, c2.balance)",
+      "difficulty": 2,
+      "choices": ["50 20", "20 20", "50 50", "Error"],
+      "answer": 0,
+      "explanation": "c1 gets amount=50 (explicitly passed). c2 gets amount=20 (the default value since no second argument was given).",
+      "commonMistakes": ["Thinking both use the default value"]
+    },
+    {
+      "id": "su1_q8",
+      "type": "error_spotting",
+      "concept": "accessing private variables",
+      "prompt": "Will this code cause an error?\n\nclass Person:\n    def __init__(self, name):\n        self.__name = name\n\np = Person('Alice')\nprint(p.__name)",
+      "difficulty": 3,
+      "choices": [
+        "No error, prints 'Alice'",
+        "AttributeError — __name is private",
+        "SyntaxError",
+        "NameError"
+      ],
+      "answer": 1,
+      "explanation": "Accessing p.__name from outside the class raises an AttributeError because Python's name mangling renames it to _Person__name. You need a @property getter to access it safely.",
+      "commonMistakes": ["Thinking __ variables can be accessed directly from outside"]
+    },
+    {
+      "id": "su1_q9",
+      "type": "mcq",
+      "concept": "__str__ method",
+      "prompt": "When is the __str__ method called automatically?",
+      "difficulty": 2,
+      "choices": [
+        "When you create the object",
+        "When you use print() on the object or str()",
+        "When you delete the object",
+        "When you compare two objects"
+      ],
+      "answer": 1,
+      "explanation": "Python calls __str__ automatically when you use print(obj) or str(obj). It should return a string representation of the object.",
+      "commonMistakes": ["Thinking __str__ should print directly instead of returning a string"]
+    },
+    {
+      "id": "su1_q10",
+      "type": "mcq",
+      "concept": "setter validation",
+      "prompt": "What is the purpose of adding validation inside a setter?",
+      "difficulty": 2,
+      "choices": [
+        "To make the code run faster",
+        "To prevent invalid values from being stored",
+        "To make the variable public",
+        "To delete the old value"
+      ],
+      "answer": 1,
+      "explanation": "Setter validation checks whether a new value meets certain rules before saving it. For example, ensuring an age is positive or a balance is not negative.",
+      "commonMistakes": ["Forgetting to add validation and just assigning directly"]
+    }
+  ]
+}

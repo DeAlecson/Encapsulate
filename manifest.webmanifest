@@ -1,0 +1,22 @@
+{
+  "name": "Encapsulate — ICT162 OOP Coach",
+  "short_name": "Encapsulate",
+  "description": "A mobile-friendly ICT162 OOP learning assistant with quizzes, code drills, offline progress, and optional AI-powered marking.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f1117",
+  "theme_color": "#7c6aef",
+  "icons": [
+    {
+      "src": "./assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
