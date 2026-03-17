@@ -289,56 +289,90 @@ const LessonEngine = (() => {
   };
 
   /* ---------- simple markdown to HTML ---------- */
-  const markdownToHTML = (text) => {
-    if (!text) return '';
+  const markdownToHTML = (text) => Utils.markdownToHTML(text);
 
-    let html = escapeHTML(text);
-
-    // Code blocks
-    html = html.replace(/```python\n([\s\S]*?)```/g, (_, code) => {
-      return `<pre class="code-block"><code class="language-python">${code.trim()}</code></pre>`;
-    });
-    html = html.replace(/```([\s\S]*?)```/g, (_, code) => {
-      return `<pre class="code-block"><code>${code.trim()}</code></pre>`;
-    });
-
-    // Inline code
-    html = html.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
-
-    // Bold
-    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-
-    // Line breaks and paragraphs
-    html = html.replace(/\n\n/g, '</p><p>');
-    html = html.replace(/\n/g, '<br>');
-    html = '<p>' + html + '</p>';
-
-    return html;
-  };
-
-  /* ---------- syntax highlight (simple) ---------- */
+  /* ---------- syntax highlight (simple, safe) ---------- */
   const highlightCode = () => {
     document.querySelectorAll('.code-block code').forEach(block => {
-      let code = block.innerHTML;
-      // Python keywords
-      const keywords = ['class', 'def', 'self', 'return', 'if', 'else', 'elif', 'for', 'in', 'while', 'try', 'except', 'raise', 'finally', 'import', 'from', 'as', 'pass', 'True', 'False', 'None', 'not', 'and', 'or', 'super', 'print', 'with', 'del', 'lambda', 'yield'];
-      // Decorators
-      code = code.replace(/(@\w+)/g, '<span class="hl-decorator">$1</span>');
-      // Strings
-      code = code.replace(/(&#x27;[^&#]*?&#x27;|&quot;[^&]*?&quot;)/g, '<span class="hl-string">$1</span>');
-      code = code.replace(/(f&#x27;[^&#]*?&#x27;|f&quot;[^&]*?&quot;)/g, '<span class="hl-string">$1</span>');
-      // Comments
-      code = code.replace(/(#.*)$/gm, '<span class="hl-comment">$1</span>');
-      // Keywords (word boundary)
-      for (const kw of keywords) {
-        const re = new RegExp('\\b(' + kw + ')\\b', 'g');
-        code = code.replace(re, '<span class="hl-keyword">$1</span>');
-      }
-      // Numbers
-      code = code.replace(/\b(\d+\.?\d*)\b/g, '<span class="hl-number">$1</span>');
-
-      block.innerHTML = code;
+      // Work from textContent (plain text, no HTML entities)
+      const raw = block.textContent;
+      const lines = raw.split('\n');
+      const highlighted = lines.map(line => highlightLine(line)).join('\n');
+      block.innerHTML = highlighted;
     });
+  };
+
+  const highlightLine = (line) => {
+    // Tokenise the line to avoid highlighting inside strings/comments
+    const tokens = [];
+    let i = 0;
+
+    while (i < line.length) {
+      // Comment — rest of line
+      if (line[i] === '#') {
+        tokens.push({ type: 'comment', text: line.slice(i) });
+        i = line.length;
+      }
+      // String (single or double quote, including f-strings)
+      else if (line[i] === "'" || line[i] === '"' || (line[i] === 'f' && (line[i+1] === "'" || line[i+1] === '"'))) {
+        const fPrefix = line[i] === 'f' ? 'f' : '';
+        const qStart = fPrefix ? i + 1 : i;
+        const q = line[qStart];
+        let j = qStart + 1;
+        while (j < line.length && line[j] !== q) {
+          if (line[j] === '\\') j++; // skip escaped char
+          j++;
+        }
+        j++; // include closing quote
+        tokens.push({ type: 'string', text: line.slice(i, j) });
+        i = j;
+      }
+      // Decorator
+      else if (line[i] === '@' && /\w/.test(line[i+1] || '')) {
+        let j = i + 1;
+        while (j < line.length && /\w/.test(line[j])) j++;
+        // Include dotted decorators like @name.setter
+        if (j < line.length && line[j] === '.') {
+          j++;
+          while (j < line.length && /\w/.test(line[j])) j++;
+        }
+        tokens.push({ type: 'decorator', text: line.slice(i, j) });
+        i = j;
+      }
+      // Word (identifier or keyword)
+      else if (/[a-zA-Z_]/.test(line[i])) {
+        let j = i;
+        while (j < line.length && /[\w]/.test(line[j])) j++;
+        tokens.push({ type: 'word', text: line.slice(i, j) });
+        i = j;
+      }
+      // Number
+      else if (/\d/.test(line[i])) {
+        let j = i;
+        while (j < line.length && /[\d.]/.test(line[j])) j++;
+        tokens.push({ type: 'number', text: line.slice(i, j) });
+        i = j;
+      }
+      // Other (operators, whitespace, punctuation)
+      else {
+        tokens.push({ type: 'plain', text: line[i] });
+        i++;
+      }
+    }
+
+    const KEYWORDS = new Set(['class','def','self','return','if','else','elif','for','in','while','try','except','raise','finally','import','from','as','pass','True','False','None','not','and','or','super','print','with','del','lambda','yield','type']);
+
+    return tokens.map(t => {
+      const esc = escapeHTML(t.text);
+      switch (t.type) {
+        case 'comment':   return `<span class="hl-comment">${esc}</span>`;
+        case 'string':    return `<span class="hl-string">${esc}</span>`;
+        case 'decorator': return `<span class="hl-decorator">${esc}</span>`;
+        case 'number':    return `<span class="hl-number">${esc}</span>`;
+        case 'word':      return KEYWORDS.has(t.text) ? `<span class="hl-keyword">${esc}</span>` : esc;
+        default:          return esc;
+      }
+    }).join('');
   };
 
   return { loadLesson, loadQuiz, renderLesson };

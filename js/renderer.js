@@ -139,21 +139,31 @@ const Renderer = (() => {
 
     main().innerHTML = `
       <div class="page-container">
-        <header class="page-header">
-          <h1 class="page-title">Study Units</h1>
-          <p class="page-sub">6 units covering everything in ICT162</p>
+        <header class="hub-header hub-header--learn">
+          <div class="hub-header__icon">📚</div>
+          <div>
+            <h1 class="hub-header__title">Study Units</h1>
+            <p class="hub-header__sub">6 units covering everything in ICT162. Start from the top and work your way down.</p>
+          </div>
         </header>
-        <div class="unit-grid">
-          ${UNITS.map(u => {
+        <div class="hub-grid">
+          ${UNITS.filter(u => u.id !== 'welcome').map(u => {
             const mastery = p.masteryMap[u.id] || 0;
+            const done = p.completedLessons.includes(u.id);
             return `
-              <button class="unit-tile" onclick="Router.navigate('/units/${u.id}')" style="--unit-color:${u.color}">
-                <span class="unit-tile__icon">${u.icon}</span>
-                <h3 class="unit-tile__title">${u.name}</h3>
-                <div class="unit-tile__bar">
-                  <div class="unit-tile__fill" style="width:${mastery}%"></div>
+              <button class="hub-card hub-card--learn" onclick="Router.navigate('/units/${u.id}')" style="--unit-color:${u.color}">
+                <span class="hub-card__icon">${u.icon}</span>
+                <div class="hub-card__body">
+                  <span class="hub-card__unit">${u.id.toUpperCase()}</span>
+                  <h3 class="hub-card__title">${u.name}</h3>
+                  <div class="hub-card__bar">
+                    <div class="hub-card__bar-fill" style="width:${mastery}%;background:${u.color}"></div>
+                  </div>
+                  <div class="hub-card__meta">
+                    <span class="hub-card__pct">${mastery}%</span>
+                    ${done ? '<span class="hub-card__badge hub-card__badge--done">✓ Lesson done</span>' : ''}
+                  </div>
                 </div>
-                <span class="unit-tile__pct">${mastery}%</span>
               </button>
             `;
           }).join('')}
@@ -524,30 +534,122 @@ const Renderer = (() => {
     unitDetail,
     skillMap,
     reviewVault,
+
+    /* ==================== THEORY QUIZ HUB ==================== */
     quiz: () => {
       setActiveNav('/quiz');
       const p = Storage.getProgress();
       main().innerHTML = `
         <div class="page-container">
-          <header class="page-header">
-            <h1 class="page-title">❓ Theory Quiz Arena</h1>
-            <p class="page-sub">Test your understanding across all topics</p>
+          <header class="hub-header hub-header--quiz">
+            <div class="hub-header__icon">❓</div>
+            <div>
+              <h1 class="hub-header__title">Theory Quiz Arena</h1>
+              <p class="hub-header__sub">Test your knowledge with MCQs, output prediction, and error spotting</p>
+            </div>
           </header>
-          <div class="unit-grid">
+          <div class="hub-grid">
             ${UNITS.filter(u => u.id !== 'welcome').map(u => {
               const done = (p.completedQuizzes || []).includes(u.id + '_quiz');
+              const mastery = p.masteryMap[u.id] || 0;
               return `
-                <button class="unit-tile" onclick="QuizEngine.startUnitQuiz('${u.id}')" style="--unit-color:${u.color}">
-                  <span class="unit-tile__icon">${u.icon}</span>
-                  <h3 class="unit-tile__title">${u.name}</h3>
-                  <span class="unit-tile__pct">${done ? '✓ Done' : 'Take quiz'}</span>
+                <button class="hub-card hub-card--quiz" onclick="QuizEngine.startUnitQuiz('${u.id}')" style="--unit-color:${u.color}">
+                  <span class="hub-card__icon">${u.icon}</span>
+                  <div class="hub-card__body">
+                    <span class="hub-card__unit">${u.id.toUpperCase()}</span>
+                    <h3 class="hub-card__title">${u.name}</h3>
+                    <div class="hub-card__meta">
+                      ${done
+                        ? '<span class="hub-card__badge hub-card__badge--done">✓ Completed</span>'
+                        : `<span class="hub-card__badge hub-card__badge--ready">Ready</span>`}
+                    </div>
+                  </div>
                 </button>`;
             }).join('')}
           </div>
         </div>`;
     },
-    practice: () => PracticeEngine.startHub(),
-    mock:     placeholder('Mock Exam Arena', '🏆', 'Timed and untimed exam practice coming soon'),
+
+    /* ==================== CODE PRACTICE HUB ==================== */
+    practice: () => {
+      const p = Storage.getProgress();
+      const mainEl = $('#main-content');
+      mainEl.innerHTML = `
+        <div class="page-container">
+          <header class="hub-header hub-header--practice">
+            <div class="hub-header__icon">💻</div>
+            <div>
+              <h1 class="hub-header__title">Code Practice Lab</h1>
+              <p class="hub-header__sub">Write classes, methods, and debug code from ICT162 exercises</p>
+            </div>
+          </header>
+          <div class="hub-grid">
+            ${UNITS.filter(u => u.id !== 'welcome' && u.id.startsWith('su')).map(u => {
+              const drillsDone = (p.completedDrills || []).filter(d => d.startsWith(u.id)).length;
+              const hasDrills = ['su1','su2','su3','su4'].includes(u.id);
+              return `
+                <button class="hub-card hub-card--practice ${!hasDrills ? 'hub-card--coming' : ''}"
+                        onclick="${hasDrills ? `PracticeEngine.startDrills('${u.id}')` : ''}"
+                        ${!hasDrills ? 'disabled' : ''}>
+                  <span class="hub-card__icon">${u.icon}</span>
+                  <div class="hub-card__body">
+                    <span class="hub-card__unit">${u.id.toUpperCase()}</span>
+                    <h3 class="hub-card__title">${u.name}</h3>
+                    <div class="hub-card__meta">
+                      ${!hasDrills
+                        ? '<span class="hub-card__badge hub-card__badge--soon">Coming soon</span>'
+                        : drillsDone > 0
+                          ? `<span class="hub-card__badge hub-card__badge--done">${drillsDone} completed</span>`
+                          : '<span class="hub-card__badge hub-card__badge--ready">Start drills</span>'}
+                    </div>
+                  </div>
+                </button>`;
+            }).join('')}
+          </div>
+        </div>`;
+    },
+
+    /* ==================== MOCK EXAM ARENA ==================== */
+    mock: () => {
+      setActiveNav('/mock');
+      const p = Storage.getProgress();
+      const mainEl = $('#main-content');
+      mainEl.innerHTML = `
+        <div class="page-container">
+          <header class="hub-header hub-header--mock">
+            <div class="hub-header__icon">🏆</div>
+            <div>
+              <h1 class="hub-header__title">Mock Exam Arena</h1>
+              <p class="hub-header__sub">Timed and untimed mixed-topic practice for exam prep</p>
+            </div>
+          </header>
+
+          <div class="mock-options">
+            <button class="mock-option-card" onclick="MockEngine.start('quick')">
+              <span class="mock-option-card__icon">⚡</span>
+              <h3>Quick Fire</h3>
+              <p>10 random questions, no timer. Good for warm-up.</p>
+            </button>
+            <button class="mock-option-card" onclick="MockEngine.start('timed')">
+              <span class="mock-option-card__icon">⏱️</span>
+              <h3>Timed Mock</h3>
+              <p>15 questions in 20 minutes. Simulates exam pressure.</p>
+            </button>
+            <button class="mock-option-card" onclick="MockEngine.start('full')">
+              <span class="mock-option-card__icon">📋</span>
+              <h3>Full Mock</h3>
+              <p>All available questions, untimed. Thorough review.</p>
+            </button>
+            <button class="mock-option-card" onclick="MockEngine.start('weak')">
+              <span class="mock-option-card__icon">🎯</span>
+              <h3>Weak Topics</h3>
+              <p>Focus on concepts you have gotten wrong before.</p>
+              ${(p.weakTopics || []).length === 0 ? '<span class="mock-option-card__note">Take some quizzes first to unlock this</span>' : ''}
+            </button>
+          </div>
+        </div>`;
+    },
+
     aiStudio,
     UNITS
   };

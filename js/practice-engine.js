@@ -311,15 +311,9 @@ const PracticeEngine = (() => {
      =================================================================== */
   const formatPromptMD = (text) => {
     if (!text) return '';
-    let html = escapeHTML(text);
-    html = html.replace(/```python\n([\s\S]*?)```/g, (_, c) => `<pre class="code-block"><code>${c.trim()}</code></pre>`);
-    html = html.replace(/```([\s\S]*?)```/g, (_, c) => `<pre class="code-block"><code>${c.trim()}</code></pre>`);
-    html = html.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
-    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    html = html.replace(/\n- /g, '\n• ');
-    html = html.replace(/\n\n/g, '</p><p>');
-    html = html.replace(/\n/g, '<br>');
-    return '<p>' + html + '</p>';
+    // Convert markdown list markers before passing to shared renderer
+    let processed = text.replace(/\n- /g, '\n• ');
+    return Utils.markdownToHTML(processed);
   };
 
   /* ===================================================================

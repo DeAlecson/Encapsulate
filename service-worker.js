@@ -2,7 +2,7 @@
    service-worker.js — Offline cache for Encapsulate
    ========================================================= */
 
-const CACHE_NAME = 'encapsulate-v5';
+const CACHE_NAME = 'encapsulate-v6';
 
 const STATIC_ASSETS = [
   './',
@@ -23,6 +23,7 @@ const STATIC_ASSETS = [
   './js/lesson-engine.js',
   './js/quiz-engine.js',
   './js/practice-engine.js',
+  './js/mock-engine.js',
   './js/renderer.js',
   './js/app.js',
   './data/app-config.json',

@@ -98,36 +98,46 @@ const QuizEngine = (() => {
 
   /* ---------- format prompt with code blocks ---------- */
   const formatPrompt = (text) => {
-    let html = escapeHTML(text);
-    // Handle \n as actual newlines in code-like prompts
-    html = html.replace(/\\n/g, '\n');
-    if (html.includes('\n') && (html.includes('class ') || html.includes('def ') || html.includes('print'))) {
-      // This looks like code — wrap in a code block
-      const lines = html.split('\n');
-      let inCode = false;
+    // Quiz JSON uses literal \n for newlines — convert them
+    let raw = text.replace(/\\n/g, '\n');
+
+    // If it contains code-like content, wrap code portions in fences for the markdown renderer
+    if (raw.includes('\n') && (raw.includes('class ') || raw.includes('def ') || raw.includes('print('))) {
+      const lines = raw.split('\n');
       let result = '';
-      let codeBlock = '';
+      let codeLines = [];
+      let inCode = false;
+
+      const flushCode = () => {
+        if (codeLines.length > 0) {
+          result += '\n```python\n' + codeLines.join('\n') + '\n```\n';
+          codeLines = [];
+        }
+        inCode = false;
+      };
 
       for (const line of lines) {
-        if (!inCode && (line.trim().startsWith('class ') || line.trim().startsWith('def ') || line.trim().startsWith('from ') || line.trim().startsWith('import '))) {
+        const trimmed = line.trim();
+        const looksLikeCode = trimmed.startsWith('class ') || trimmed.startsWith('def ') ||
+          trimmed.startsWith('from ') || trimmed.startsWith('import ') ||
+          trimmed.startsWith('self.') || trimmed.startsWith('print(') ||
+          trimmed.startsWith('@') || trimmed.startsWith('#') ||
+          (inCode && (trimmed === '' || /^\s/.test(line) || /^[a-z_]/.test(trimmed)));
+
+        if (looksLikeCode) {
           inCode = true;
-          codeBlock = line;
-        } else if (inCode && (line.trim() === '' && codeBlock.trim() === '')) {
-          inCode = false;
-        } else if (inCode) {
-          codeBlock += '\n' + line;
+          codeLines.push(line);
         } else {
-          result += '<p>' + line + '</p>';
+          flushCode();
+          result += line + '\n';
         }
       }
+      flushCode();
 
-      if (codeBlock) {
-        result += `<pre class="code-block"><code>${codeBlock}</code></pre>`;
-      }
-      return result || '<p>' + html.replace(/\n/g, '<br>') + '</p>';
+      return Utils.markdownToHTML(result.trim());
     }
 
-    return '<p>' + html.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
+    return Utils.markdownToHTML(raw);
   };
 
   const formatChoiceText = (text) => {
