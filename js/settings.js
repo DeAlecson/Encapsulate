@@ -30,10 +30,6 @@ const Settings = (() => {
     const container = $('#settings-content');
     if (!container) return;
 
-    // *** THE FIX: save focus state before innerHTML destroys the DOM ***
-    const focusedId = document.activeElement?.id || null;
-    const focusedValue = (focusedId === 'api-key-input') ? document.activeElement?.value : null;
-
     const s = Storage.getSettings();
     const hasKey = !!Storage.getApiKey();
 
@@ -120,17 +116,6 @@ const Settings = (() => {
     `;
 
     bindEvents();
-
-    // *** THE FIX: restore focus after DOM rebuild ***
-    if (focusedId) {
-      const restored = document.getElementById(focusedId);
-      if (restored) {
-        restored.focus();
-        if (focusedId === 'api-key-input' && focusedValue !== null) {
-          restored.value = focusedValue;
-        }
-      }
-    }
   };
 
   const bindEvents = () => {
@@ -188,7 +173,8 @@ const Settings = (() => {
       btn.onclick = () => {
         Storage.updateSettings(s => s.strictness = btn.dataset.strict);
         toast(`Strictness: ${STRICTNESS[btn.dataset.strict].label}`, 'info');
-        render();
+        $$('.strictness-card').forEach(b => b.classList.remove('strictness-card--active'));
+        btn.classList.add('strictness-card--active');
       };
     });
 
@@ -196,7 +182,8 @@ const Settings = (() => {
       btn.onclick = () => {
         Storage.updateSettings(s => s.theme = btn.dataset.theme);
         applyTheme(btn.dataset.theme);
-        render();
+        $$('[data-theme]').forEach(b => b.classList.remove('toggle-btn--active'));
+        btn.classList.add('toggle-btn--active');
       };
     });
 
@@ -204,7 +191,8 @@ const Settings = (() => {
       btn.onclick = () => {
         Storage.updateSettings(s => s.fontSize = btn.dataset.fontsize);
         applyFontSize(btn.dataset.fontsize);
-        render();
+        $$('[data-fontsize]').forEach(b => b.classList.remove('toggle-btn--active'));
+        btn.classList.add('toggle-btn--active');
       };
     });
 
@@ -218,7 +206,8 @@ const Settings = (() => {
       btn.onclick = () => {
         Storage.updateSettings(s => s.mode = btn.dataset.mode);
         toast(`Mode: ${btn.dataset.mode === 'guided' ? 'Guided Path' : 'Free Explore'}`, 'info');
-        render();
+        $$('[data-mode]').forEach(b => b.classList.remove('toggle-btn--active'));
+        btn.classList.add('toggle-btn--active');
       };
     });
 
