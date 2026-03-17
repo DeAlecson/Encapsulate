@@ -7,18 +7,18 @@ const Settings = (() => {
   const { $, $$, el, toast, STRICTNESS } = Utils;
 
   const open = () => {
-    const panel = $('#settings-panel');
-    if (panel) {
-      panel.classList.add('settings--open');
-      State.set('settingsOpen', true);
+    const dialog = $('#settings-panel');
+    if (dialog && !dialog.open) {
       render();
+      dialog.showModal();
+      State.set('settingsOpen', true);
     }
   };
 
   const close = () => {
-    const panel = $('#settings-panel');
-    if (panel) {
-      panel.classList.remove('settings--open');
+    const dialog = $('#settings-panel');
+    if (dialog && dialog.open) {
+      dialog.close();
       State.set('settingsOpen', false);
     }
   };
@@ -149,7 +149,7 @@ const Settings = (() => {
     const keySave = $('#api-key-save');
     const keyClear = $('#api-key-clear');
 
-    // Set value via JS property (not HTML attribute) to avoid escaping issues
+    // Set value via JS property (not HTML attribute)
     if (keyInput) {
       keyInput.value = Storage.getApiKey();
     }

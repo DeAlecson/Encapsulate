@@ -53,9 +53,20 @@ const App = (() => {
     const closeBtn = $('#settings-close');
     if (closeBtn) closeBtn.onclick = Settings.close;
 
-    // Settings backdrop
-    const backdrop = $('#settings-backdrop');
-    if (backdrop) backdrop.onclick = Settings.close;
+    // Close dialog when clicking the backdrop (native dialog fires click on the dialog element itself)
+    const settingsDialog = $('#settings-panel');
+    if (settingsDialog) {
+      settingsDialog.addEventListener('click', (e) => {
+        // If the click target is the dialog itself (not a child), it means the backdrop was clicked
+        if (e.target === settingsDialog) {
+          Settings.close();
+        }
+      });
+      // Close on Escape is handled natively by <dialog>, but also handle the cancel event
+      settingsDialog.addEventListener('cancel', (e) => {
+        State.set('settingsOpen', false);
+      });
+    }
 
     // Nav toggle (mobile)
     const navToggle = $('#nav-toggle');

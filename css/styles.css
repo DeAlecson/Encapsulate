@@ -225,53 +225,49 @@ pre {
 /* =========================================================
    SETTINGS PANEL (slide-in overlay)
    ========================================================= */
-.settings-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 199;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s;
-}
-
-.settings-panel {
+/* =========================================================
+   SETTINGS PANEL (native dialog)
+   ========================================================= */
+.settings-dialog {
   position: fixed;
   top: 0;
   right: 0;
+  left: auto;
   width: var(--settings-width);
   max-width: 90vw;
   height: 100dvh;
-  background: var(--bg-surface);
+  max-height: 100dvh;
+  margin: 0;
+  margin-left: auto;
+  padding: 0;
+  border: none;
   border-left: 1px solid var(--border);
-  z-index: 200;
-  transform: translateX(100%);
-  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+.settings-dialog::backdrop {
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+}
+
+.settings-dialog__inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   overflow-y: auto;
 }
 
-.settings--open .settings-panel,
-.settings-panel.settings--open {
-  transform: translateX(0);
+.settings-dialog[open] {
+  animation: slideInRight 0.3s cubic-bezier(0.4,0,0.2,1);
 }
 
-.settings--open ~ .settings-backdrop,
-.settings-panel.settings--open + .settings-backdrop {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Because we toggle on the panel itself, also handle backdrop: */
-body.settings-visible .settings-backdrop {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.settings-panel.settings--open ~ .settings-backdrop {
-  opacity: 1;
-  pointer-events: auto;
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
 }
 
 .settings__header {
@@ -1963,11 +1959,11 @@ body.settings-visible .settings-backdrop {
 
 /* Fix settings panel z-index on mobile */
 @media (max-width: 768px) {
-  .settings-panel { width: 100vw; max-width: 100vw; }
+  .settings-dialog { width: 100vw; max-width: 100vw; }
 }
 
 /* Smooth transitions on theme change */
-body, .app-header, .side-nav, .settings-panel,
+body, .app-header, .side-nav, .settings-dialog,
 .stat-card, .action-card, .unit-tile, .unit-card,
 .feedback-card, .choice-btn {
   transition: background-color 0.25s, border-color 0.25s, color 0.25s;
@@ -2252,18 +2248,18 @@ body, .app-header, .side-nav, .settings-panel,
 }
 
 /* Fix: ensure settings panel inputs are always interactive */
-.settings-panel input,
-.settings-panel textarea,
-.settings-panel button,
-.settings-panel select {
+.settings-dialog input,
+.settings-dialog textarea,
+.settings-dialog button,
+.settings-dialog select {
   position: relative;
   z-index: 1;
   pointer-events: auto;
   user-select: text;
   -webkit-user-select: text;
 }
-.settings-panel input[type="password"],
-.settings-panel input[type="text"] {
+.settings-dialog input[type="password"],
+.settings-dialog input[type="text"] {
   -webkit-appearance: none;
   appearance: none;
   touch-action: manipulation;

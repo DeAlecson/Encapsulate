@@ -77,15 +77,16 @@
   </main>
 </div>
 
-<!-- ======== SETTINGS PANEL (overlay) ======== -->
-<div class="settings-panel" id="settings-panel">
-  <div class="settings__header">
-    <h2 class="settings__title">Settings</h2>
-    <button class="settings__close" id="settings-close" aria-label="Close settings">✕</button>
+<!-- ======== SETTINGS PANEL (native dialog) ======== -->
+<dialog class="settings-dialog" id="settings-panel">
+  <div class="settings-dialog__inner">
+    <div class="settings__header">
+      <h2 class="settings__title">Settings</h2>
+      <button class="settings__close" id="settings-close" aria-label="Close settings">✕</button>
+    </div>
+    <div id="settings-content"></div>
   </div>
-  <div id="settings-content"></div>
-</div>
-<div class="settings-backdrop" id="settings-backdrop"></div>
+</dialog>
 
 <!-- ======== TOAST ======== -->
 <div class="toast" id="toast-container"></div>
