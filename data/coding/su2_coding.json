@@ -1,0 +1,44 @@
+{
+  "unitId": "su2",
+  "tasks": [
+    {
+      "id": "su2_c1",
+      "type": "write_class",
+      "concept": "composition (has-a)",
+      "prompt": "Write a Passenger class that uses composition.\n\nRequirements:\n- Instance variables: ppNo (str), name (str), flight (Flight object)\n- Constructor takes all three as parameters\n- @property getter for ppNo, name, flight\n- @flight.setter to change the flight\n- __str__ returns 'Name: <name> Flight: <flight>'\n\nAssume the Flight class already exists and has a working __str__.",
+      "difficulty": 2,
+      "starterCode": "class Passenger:\n    def __init__(self, ppNo, name, flight):\n        # your code here\n        pass\n\n    # add properties, setter, __str__",
+      "modelAnswer": "class Passenger:\n    def __init__(self, ppNo, name, flight):\n        self.__ppNo = ppNo\n        self.__name = name\n        self.__flight = flight\n\n    @property\n    def ppNo(self):\n        return self.__ppNo\n\n    @property\n    def name(self):\n        return self.__name\n\n    @property\n    def flight(self):\n        return self.__flight\n\n    @flight.setter\n    def flight(self, newFlight):\n        self.__flight = newFlight\n\n    def __str__(self):\n        return f'Name: {self.__name} Flight: {self.__flight}'",
+      "expectedKeyPoints": ["composition with Flight object", "three properties", "flight setter", "__str__ using Flight's __str__"],
+      "hintLadder": ["Store the flight object as self.__flight", "The setter uses @flight.setter decorator", "__str__ can use {self.__flight} which calls Flight's __str__"],
+      "commonMistakes": ["Storing flight as a string instead of as an object", "Forgetting the flight setter"],
+      "checks": [
+        { "type": "keyword", "value": "class Passenger", "label": "Class declaration" },
+        { "type": "keyword", "value": "self.__flight", "label": "Stores Flight object" },
+        { "type": "keyword", "value": "@flight.setter", "label": "Flight setter" },
+        { "type": "keyword", "value": "@property", "label": "Property decorator" },
+        { "type": "keyword", "value": "__str__", "label": "__str__ method" }
+      ]
+    },
+    {
+      "id": "su2_c2",
+      "type": "write_method",
+      "concept": "collection with list — search and remove",
+      "prompt": "Write two methods for a PhoneBook class that stores Contact objects in a list called self.__contacts.\n\n1. searchContact(name) — returns the Contact whose name matches (case insensitive), or None if not found\n2. removeContact(name) — removes the Contact if found and returns True, otherwise returns False",
+      "difficulty": 3,
+      "starterCode": "# Assume self.__contacts is a list of Contact objects\n# Each Contact has a .name property\n\ndef searchContact(self, name):\n    # your code\n    pass\n\ndef removeContact(self, name):\n    # your code\n    pass",
+      "modelAnswer": "def searchContact(self, name):\n    for c in self.__contacts:\n        if c.name.lower() == name.lower():\n            return c\n    return None\n\ndef removeContact(self, name):\n    c = self.searchContact(name)\n    if c:\n        self.__contacts.remove(c)\n        return True\n    return False",
+      "expectedKeyPoints": ["loop through list", "case insensitive comparison", "return None if not found", "remove uses searchContact", "return True/False"],
+      "hintLadder": ["Use a for loop: for c in self.__contacts:", "Compare with .lower() for case insensitive: c.name.lower() == name.lower()", "removeContact can call searchContact first, then use .remove()"],
+      "commonMistakes": ["Forgetting to return None when not found", "Not using case insensitive comparison", "Using del instead of .remove()"],
+      "checks": [
+        { "type": "keyword", "value": "def searchContact", "label": "Search method defined" },
+        { "type": "keyword", "value": "def removeContact", "label": "Remove method defined" },
+        { "type": "pattern", "value": "for.*in.*self.__contacts|for.*in.*self._contacts", "label": "Loops through contacts" },
+        { "type": "pattern", "value": "\\.lower\\(\\)", "label": "Case insensitive comparison" },
+        { "type": "keyword", "value": "return None", "label": "Returns None when not found" },
+        { "type": "pattern", "value": "return True|return False", "label": "Returns boolean" }
+      ]
+    }
+  ]
+}

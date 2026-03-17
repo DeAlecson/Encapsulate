@@ -1,0 +1,75 @@
+{
+  "guidedPath": ["welcome","su1","su2","su3","su4","su5","su6"],
+  "units": [
+    {
+      "id": "welcome",
+      "title": "Getting Started",
+      "icon": "👋",
+      "color": "#a78bfa",
+      "description": "How Encapsulate works and what you will learn",
+      "lessonFile": "lessons/welcome.json",
+      "quizFile": null,
+      "prerequisites": []
+    },
+    {
+      "id": "su1",
+      "title": "Classes & Objects",
+      "icon": "🧱",
+      "color": "#6C63FF",
+      "description": "The building blocks of OOP: classes, objects, constructors, properties, and methods",
+      "lessonFile": "lessons/su1.json",
+      "quizFile": "quizzes/su1_quiz.json",
+      "prerequisites": ["welcome"]
+    },
+    {
+      "id": "su2",
+      "title": "Composition & Collection",
+      "icon": "🔗",
+      "color": "#00C9A7",
+      "description": "Objects inside objects, lists of objects, and dictionary collections",
+      "lessonFile": "lessons/su2.json",
+      "quizFile": "quizzes/su2_quiz.json",
+      "prerequisites": ["su1"]
+    },
+    {
+      "id": "su3",
+      "title": "Inheritance",
+      "icon": "🌳",
+      "color": "#FF6B6B",
+      "description": "Parent and child classes, super(), overriding, abstract classes, and polymorphism",
+      "lessonFile": "lessons/su3.json",
+      "quizFile": "quizzes/su3_quiz.json",
+      "prerequisites": ["su1"]
+    },
+    {
+      "id": "su4",
+      "title": "Exception Handling",
+      "icon": "🛡️",
+      "color": "#FFA94D",
+      "description": "Try/except, raising errors, custom exceptions, and validation",
+      "lessonFile": "lessons/su4.json",
+      "quizFile": "quizzes/su4_quiz.json",
+      "prerequisites": ["su3"]
+    },
+    {
+      "id": "su5",
+      "title": "Python GUI",
+      "icon": "🖥️",
+      "color": "#748FFC",
+      "description": "Tkinter basics: windows, widgets, layout, buttons, callbacks, and form validation",
+      "lessonFile": "lessons/su5.json",
+      "quizFile": "quizzes/su5_quiz.json",
+      "prerequisites": ["su4"]
+    },
+    {
+      "id": "su6",
+      "title": "SOLID & Design",
+      "icon": "🏗️",
+      "color": "#F06595",
+      "description": "High cohesion, low coupling, SOLID principles, and spotting bad designs",
+      "lessonFile": "lessons/su6.json",
+      "quizFile": "quizzes/su6_quiz.json",
+      "prerequisites": ["su1"]
+    }
+  ]
+}

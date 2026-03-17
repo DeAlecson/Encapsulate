@@ -1,0 +1,25 @@
+{
+  "appName": "Encapsulate",
+  "version": "1.0.0",
+  "course": "ICT162 — Object Oriented Programming",
+  "institution": "SUSS",
+  "units": [
+    { "id": "su1", "title": "Classes & Objects" },
+    { "id": "su2", "title": "Composition & Collection" },
+    { "id": "su3", "title": "Inheritance" },
+    { "id": "su4", "title": "Exception Handling" },
+    { "id": "su5", "title": "Python GUI" },
+    { "id": "su6", "title": "SOLID & Design" }
+  ],
+  "strictnessLevels": ["tutor", "guided", "exam", "brutal"],
+  "defaultStrictness": "tutor",
+  "xpPerLevel": 100,
+  "xpRewards": {
+    "lessonComplete": 15,
+    "quizCorrect": 10,
+    "quizPartial": 5,
+    "drillComplete": 20,
+    "mockComplete": 50,
+    "streakBonus": 10
+  }
+}

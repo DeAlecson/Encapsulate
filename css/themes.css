@@ -1,0 +1,88 @@
+/* =========================================================
+   themes.css — Design tokens for Encapsulate
+   ========================================================= */
+
+/* ---------- Dark theme (default) ---------- */
+:root,
+[data-theme="dark"] {
+  --bg-base:       #0f1117;
+  --bg-surface:    #1a1d27;
+  --bg-elevated:   #232733;
+  --bg-hover:      #2a2f3d;
+  --bg-inset:      #0b0d12;
+
+  --text-primary:  #e8eaf0;
+  --text-secondary:#9ca3b4;
+  --text-muted:    #5e6578;
+  --text-inverse:  #0f1117;
+
+  --accent:        #7c6aef;
+  --accent-hover:  #9484f7;
+  --accent-subtle: rgba(124,106,239,0.12);
+
+  --green:         #34d399;
+  --green-subtle:  rgba(52,211,153,0.12);
+  --red:           #f87171;
+  --red-subtle:    rgba(248,113,113,0.12);
+  --amber:         #fbbf24;
+  --amber-subtle:  rgba(251,191,36,0.12);
+  --blue:          #60a5fa;
+  --blue-subtle:   rgba(96,165,250,0.12);
+
+  --border:        #2a2f3d;
+  --border-strong: #3d4358;
+
+  --shadow-sm:     0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md:     0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg:     0 8px 30px rgba(0,0,0,0.6);
+
+  --radius-sm:     6px;
+  --radius-md:     10px;
+  --radius-lg:     16px;
+  --radius-xl:     24px;
+
+  --nav-width:     240px;
+  --header-height: 56px;
+  --settings-width: 380px;
+
+  --font-body:     'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:     'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --font-display:  'Space Grotesk', 'DM Sans', sans-serif;
+}
+
+/* ---------- Light theme ---------- */
+[data-theme="light"] {
+  --bg-base:       #f5f6fa;
+  --bg-surface:    #ffffff;
+  --bg-elevated:   #ffffff;
+  --bg-hover:      #eef0f6;
+  --bg-inset:      #e8eaf0;
+
+  --text-primary:  #1a1d27;
+  --text-secondary:#5e6578;
+  --text-muted:    #9ca3b4;
+  --text-inverse:  #ffffff;
+
+  --accent:        #6C63FF;
+  --accent-hover:  #5a52e0;
+  --accent-subtle: rgba(108,99,255,0.08);
+
+  --border:        #e0e3eb;
+  --border-strong: #c8cdd8;
+
+  --shadow-sm:     0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md:     0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg:     0 8px 30px rgba(0,0,0,0.1);
+}
+
+/* ---------- Font size variants ---------- */
+[data-fontsize="small"]  { font-size: 14px; }
+[data-fontsize="medium"] { font-size: 16px; }
+[data-fontsize="large"]  { font-size: 18px; }
+
+/* ---------- Reduced motion ---------- */
+.reduced-motion,
+.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}

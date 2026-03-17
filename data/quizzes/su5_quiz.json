@@ -1,0 +1,33 @@
+{
+  "unitId": "su5",
+  "questions": [
+    {
+      "id": "su5_q1", "type": "mcq", "concept": "tkinter basics", "difficulty": 2,
+      "prompt": "Which method reads the text from a tkinter Entry widget?",
+      "choices": [".read()", ".get()", ".text()", ".value()"],
+      "answer": 1,
+      "explanation": "The .get() method reads the current text from an Entry widget. It always returns a string."
+    },
+    {
+      "id": "su5_q2", "type": "mcq", "concept": "button callback", "difficulty": 2,
+      "prompt": "How do you connect a button click to a method in tkinter?",
+      "choices": ["onclick=self.method", "command=self.method", "click=self.method", "action=self.method"],
+      "answer": 1,
+      "explanation": "Use the command parameter: ttk.Button(parent, text='Go', command=self.myMethod)"
+    },
+    {
+      "id": "su5_q3", "type": "mcq", "concept": "widget layout", "difficulty": 2,
+      "prompt": "Which layout method uses row and column positioning in tkinter?",
+      "choices": [".pack()", ".grid()", ".place()", ".layout()"],
+      "answer": 1,
+      "explanation": "The .grid(row=N, column=N) method places widgets in a table-like layout. ICT162 uses grid for most GUI questions."
+    },
+    {
+      "id": "su5_q4", "type": "mcq", "concept": "scrolledtext", "difficulty": 3,
+      "prompt": "How do you clear all text from a ScrolledText widget?",
+      "choices": ["self._stxt.clear()", "self._stxt.delete('1.0', tk.END)", "self._stxt.reset()", "self._stxt.set('')"],
+      "answer": 1,
+      "explanation": "Use .delete('1.0', tk.END) to clear from position 1.0 (line 1, char 0) to the end."
+    }
+  ]
+}

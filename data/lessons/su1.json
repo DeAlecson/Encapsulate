@@ -1,0 +1,124 @@
+{
+  "id": "su1",
+  "title": "Classes & Objects",
+  "unit": "su1",
+  "difficulty": 1,
+  "sections": [
+    {
+      "type": "intro",
+      "title": "What is a class?",
+      "content": "A **class** is like a blueprint or template. It describes what data something has and what it can do.\n\nFor example, think about a dice. Every dice has a **value** (the number showing). Every dice can **roll** to get a new value.\n\nIn Python, we write a class to describe this blueprint, then create **objects** from it."
+    },
+    {
+      "type": "definition",
+      "title": "Key terms",
+      "content": "**Class** — A template that defines what data and actions an object will have.\n\n**Object** — A specific instance created from a class. You can make many objects from one class.\n\n**Instance variable** — Data stored inside an object (e.g. the dice's value).\n\n**Method** — An action that an object can perform (e.g. roll the dice)."
+    },
+    {
+      "type": "example",
+      "title": "Your first class: Dice",
+      "content": "Here is a simple Dice class:\n\n```python\nfrom random import randint\n\nclass Dice:\n    def __init__(self):\n        self.__value = randint(1, 6)\n\n    @property\n    def value(self):\n        return self.__value\n\n    def roll(self):\n        self.__value = randint(1, 6)\n\n    def __str__(self):\n        return f'Value: {self.__value}'\n```\n\nLet us break this down piece by piece."
+    },
+    {
+      "type": "definition",
+      "title": "The constructor: __init__",
+      "content": "The `__init__` method is called the **constructor**. It runs automatically when you create a new object.\n\n```python\ndef __init__(self):\n    self.__value = randint(1, 6)\n```\n\n- `self` refers to the object being created\n- `self.__value` creates an instance variable called `__value`\n- The double underscore `__` makes it **private** (hidden from outside)\n\nWhen you write `d = Dice()`, Python calls `__init__` and sets up the dice with a random value."
+    },
+    {
+      "type": "checkpoint",
+      "title": "Check your understanding",
+      "content": "What does __init__ do?",
+      "question": {
+        "type": "mcq",
+        "prompt": "What does the __init__ method do in a Python class?",
+        "choices": [
+          "It deletes the object",
+          "It sets up a new object with starting values",
+          "It prints the object",
+          "It imports libraries"
+        ],
+        "answer": 1,
+        "explanation": "The __init__ method is the constructor. It runs when you create a new object and sets up its initial values (instance variables)."
+      }
+    },
+    {
+      "type": "definition",
+      "title": "Properties (getters)",
+      "content": "Since `__value` is private, code outside the class cannot access it directly. We use a **property** to let others read it safely:\n\n```python\n@property\ndef value(self):\n    return self.__value\n```\n\nNow you can write `d.value` to read the value, but you cannot change it directly from outside.\n\nThe `@property` decorator turns a method into a getter."
+    },
+    {
+      "type": "definition",
+      "title": "Setters",
+      "content": "If you want to allow changes to a private variable with some rules, use a **setter**:\n\n```python\n@value.setter\ndef value(self, newValue):\n    if 1 <= newValue <= 6:\n        self.__value = newValue\n```\n\nThe setter lets you validate the new value before saving it.\n\nNot all properties need setters. Only add one if you want controlled write access."
+    },
+    {
+      "type": "definition",
+      "title": "The __str__ method",
+      "content": "The `__str__` method controls what happens when you print an object:\n\n```python\ndef __str__(self):\n    return f'Value: {self.__value}'\n```\n\nWithout `__str__`, printing a Dice object would show something ugly like `<__main__.Dice object at 0x...>`.\n\nWith it:\n```python\nd = Dice()\nprint(d)  # Output: Value: 3\n```\n\nThe `__str__` method should return a string (not print it)."
+    },
+    {
+      "type": "worked_example",
+      "title": "Worked example: CashCard",
+      "content": "Let us build a CashCard class step by step. A cash card has an ID and a balance. You can deduct money and top up.\n\n```python\nclass CashCard:\n    def __init__(self, id, amount):\n        self.__id = id\n        self.__balance = amount\n\n    @property\n    def id(self):\n        return self.__id\n\n    @property\n    def balance(self):\n        return self.__balance\n\n    def deduct(self, amount):\n        if self.__balance >= amount:\n            self.__balance -= amount\n\n    def topUp(self, amount):\n        if amount > 0:\n            self.__balance += amount\n\n    def __str__(self):\n        return f'Id: {self.__id} Balance: ${self.__balance:.2f}'\n```\n\nUsage:\n```python\ncard = CashCard('123', 50.0)\ncard.deduct(10)\ncard.topUp(20)\nprint(card)  # Id: 123 Balance: $60.00\n```"
+    },
+    {
+      "type": "checkpoint",
+      "title": "Quick check: CashCard",
+      "content": "What happens if you call card.deduct(100) when the balance is 50?",
+      "question": {
+        "type": "mcq",
+        "prompt": "If a CashCard has a balance of $50 and you call card.deduct(100), what happens?",
+        "choices": [
+          "The balance becomes -50",
+          "Nothing happens — the condition fails",
+          "An error is raised",
+          "The balance becomes 0"
+        ],
+        "answer": 1,
+        "explanation": "The deduct method checks `if self.__balance >= amount`. Since 50 is not >= 100, the condition is False and nothing changes. The balance stays at $50."
+      }
+    },
+    {
+      "type": "definition",
+      "title": "Default parameters",
+      "content": "You can give parameters a default value so they become optional:\n\n```python\ndef __init__(self, id, amount=20):\n    self.__id = id\n    self.__balance = amount\n```\n\nNow both of these work:\n```python\nc1 = CashCard('A1', 50)    # balance = 50\nc2 = CashCard('A2')         # balance = 20 (default)\n```\n\nThis is sometimes called \"method overloading\" in other languages, but Python handles it with default parameters."
+    },
+    {
+      "type": "definition",
+      "title": "Class variables vs instance variables",
+      "content": "**Instance variables** belong to each object. Every object has its own copy.\n\n**Class variables** are shared across all objects of that class. There is only one copy.\n\n```python\nclass Dice:\n    __sides = 6    # class variable — shared by all dice\n\n    def __init__(self):\n        self.__value = randint(1, Dice.__sides)  # instance variable\n```\n\nUse class variables for values that should be the same for every object, like a bonus rate or a side count."
+    },
+    {
+      "type": "checkpoint",
+      "title": "Quick check: variables",
+      "content": "Which type of variable is shared by all objects?",
+      "question": {
+        "type": "mcq",
+        "prompt": "Which type of variable has only one copy shared by all objects of a class?",
+        "choices": [
+          "Instance variable",
+          "Class variable",
+          "Local variable",
+          "Global variable"
+        ],
+        "answer": 1,
+        "explanation": "A class variable is defined inside the class but outside any method. It is shared by all objects. Instance variables (defined with self) are separate for each object."
+      }
+    },
+    {
+      "type": "example",
+      "title": "Creating and using objects",
+      "content": "Creating an object is called **instantiation**:\n\n```python\nd = Dice()               # create a Dice object\nprint(d.value)            # read its value using the property\nd.roll()                  # call the roll method\nprint(d)                  # calls __str__ automatically\n```\n\nThe format is always: `object.method(arguments)`\n\nThis is called **sending a message** to the object."
+    },
+    {
+      "type": "worked_example",
+      "title": "Practice prompt: Person class",
+      "content": "Try writing a Person class with these requirements:\n\n- Instance variables: `name` (str), `age` (int)\n- Constructor takes name and age\n- Property getter for name and age\n- A `greet()` method that returns `'Hi, I am <name>'`\n- A `__str__` method that returns `'Name: <name> Age: <age>'`\n\nHere is the model answer:\n\n```python\nclass Person:\n    def __init__(self, name, age):\n        self.__name = name\n        self.__age = age\n\n    @property\n    def name(self):\n        return self.__name\n\n    @property\n    def age(self):\n        return self.__age\n\n    def greet(self):\n        return f'Hi, I am {self.__name}'\n\n    def __str__(self):\n        return f'Name: {self.__name} Age: {self.__age}'\n```"
+    },
+    {
+      "type": "summary",
+      "title": "Unit 1 summary",
+      "content": "You have learned the core building blocks of OOP:\n\n- A **class** is a blueprint; an **object** is an instance of it\n- `__init__` is the **constructor** that sets up new objects\n- **Instance variables** (with `self`) store data per object\n- **Properties** (`@property`) provide safe read access\n- **Setters** (`@name.setter`) provide controlled write access\n- `__str__` controls how the object prints\n- **Class variables** are shared across all objects\n- **Default parameters** make arguments optional\n\nNext up: **Composition & Collection** — putting objects inside other objects."
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "unitId": "su6",
+  "questions": [
+    {
+      "id": "su6_q1", "type": "mcq", "concept": "SRP", "difficulty": 2,
+      "prompt": "Which SOLID principle states a class should have only one reason to change?",
+      "choices": ["Open/Closed", "Single Responsibility", "Liskov Substitution", "Dependency Inversion"],
+      "answer": 1,
+      "explanation": "The Single Responsibility Principle (S in SOLID) says each class should have one job and one reason to change."
+    },
+    {
+      "id": "su6_q2", "type": "mcq", "concept": "OCP", "difficulty": 3,
+      "prompt": "The Open/Closed Principle says classes should be open for ___ but closed for ___.",
+      "choices": ["modification, extension", "extension, modification", "reading, writing", "creation, deletion"],
+      "answer": 1,
+      "explanation": "Open for extension (add new behaviour via inheritance/composition) but closed for modification (don't change existing code)."
+    },
+    {
+      "id": "su6_q3", "type": "mcq", "concept": "cohesion and coupling", "difficulty": 2,
+      "prompt": "Good OOP design aims for:",
+      "choices": ["High cohesion, high coupling", "Low cohesion, low coupling", "High cohesion, low coupling", "Low cohesion, high coupling"],
+      "answer": 2,
+      "explanation": "High cohesion means each class does one job well. Low coupling means classes depend on each other as little as possible."
+    },
+    {
+      "id": "su6_q4", "type": "mcq", "concept": "LSP", "difficulty": 3,
+      "prompt": "The Liskov Substitution Principle means:",
+      "choices": ["Parents can replace children", "Children can replace parents without breaking the program", "Interfaces should be small", "Depend on abstractions"],
+      "answer": 1,
+      "explanation": "Any child class should be usable wherever the parent is expected, without breaking the program's behaviour."
+    }
+  ]
+}

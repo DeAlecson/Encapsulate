@@ -1,0 +1,82 @@
+{
+  "version": "1.0.0",
+  "exported": "2026-03-17T12:00:00.000Z",
+  "progress": {
+    "version": "1.0.0",
+    "xp": 245,
+    "level": 3,
+    "streak": 3,
+    "lastActiveDate": "Mon Mar 17 2026",
+    "completedLessons": ["welcome", "su1"],
+    "completedQuizzes": ["su1_quiz"],
+    "completedDrills": ["su1_c1", "su1_c2"],
+    "masteryMap": {
+      "welcome": 100,
+      "su1": 65,
+      "su2": 10,
+      "su3": 0,
+      "su4": 0,
+      "su5": 0,
+      "su6": 0
+    },
+    "weakTopics": [
+      { "concept": "class variables", "unitId": "su1", "count": 2, "lastSeen": "2026-03-17T10:30:00.000Z" },
+      { "concept": "default parameters", "unitId": "su1", "count": 1, "lastSeen": "2026-03-17T11:00:00.000Z" }
+    ],
+    "wrongAnswers": [
+      {
+        "questionId": "su1_q6",
+        "unitId": "su1",
+        "concept": "class variables",
+        "yourAnswer": 0,
+        "correctAnswer": 1,
+        "timestamp": "2026-03-17T10:30:00.000Z"
+      }
+    ],
+    "bookmarks": [],
+    "notes": [],
+    "reviewHistory": [
+      {
+        "type": "code",
+        "taskId": "su1_c1",
+        "unitId": "su1",
+        "concept": "constructor and properties",
+        "studentAnswer": "class Dice:\n    def __init__(self):\n        self.__value = 1\n\n    @property\n    def value(self):\n        return self.__value\n\n    def __str__(self):\n        return f'Dice: {self.__value}'",
+        "result": {
+          "verdict": "correct",
+          "score": 100,
+          "strengths": ["Class declaration", "Constructor defined", "Private instance variable", "Property decorator", "__str__ method"],
+          "mistakes": [],
+          "missing_concepts": [],
+          "hints": [],
+          "corrected_answer": "",
+          "encouragement": "Great job! You nailed it.",
+          "next_step": "Move on to the next exercise.",
+          "source": "offline"
+        },
+        "strictness": "tutor",
+        "timestamp": "2026-03-17T11:15:00.000Z"
+      }
+    ],
+    "attempts": {
+      "su1_c1": 1,
+      "su1_c2": 2
+    },
+    "unlockedBadges": ["first_lesson"],
+    "lastVisited": { "type": "unit", "id": "su2" },
+    "guidedIndex": 2
+  },
+  "settings": {
+    "theme": "dark",
+    "fontSize": "medium",
+    "strictness": "tutor",
+    "aiMarking": true,
+    "reducedMotion": false,
+    "mode": "guided"
+  },
+  "lessonPositions": {
+    "lesson_pos_welcome": 5,
+    "lesson_pos_su1": 14,
+    "lesson_pos_su2": 3
+  }
+}
