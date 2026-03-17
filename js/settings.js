@@ -7,18 +7,18 @@ const Settings = (() => {
   const { $, $$, el, toast, STRICTNESS } = Utils;
 
   const open = () => {
-    const dialog = $('#settings-panel');
-    if (dialog && !dialog.open) {
-      render();
-      dialog.showModal();
+    const overlay = $('#settings-overlay');
+    if (overlay) {
+      overlay.classList.add('settings-overlay--open');
       State.set('settingsOpen', true);
+      render();
     }
   };
 
   const close = () => {
-    const dialog = $('#settings-panel');
-    if (dialog && dialog.open) {
-      dialog.close();
+    const overlay = $('#settings-overlay');
+    if (overlay) {
+      overlay.classList.remove('settings-overlay--open');
       State.set('settingsOpen', false);
     }
   };
@@ -143,7 +143,6 @@ const Settings = (() => {
 
   /* ---------- bind events ---------- */
   const bindEvents = () => {
-    // API key
     const keyInput = $('#api-key-input');
     const keyToggle = $('#api-key-toggle');
     const keySave = $('#api-key-save');

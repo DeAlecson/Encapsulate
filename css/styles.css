@@ -223,51 +223,42 @@ pre {
 }
 
 /* =========================================================
-   SETTINGS PANEL (slide-in overlay)
+   SETTINGS PANEL (overlay + panel)
+   The overlay IS the backdrop. The panel is a child inside it.
+   Clicking the overlay (dark area) closes. Clicking the panel does not.
    ========================================================= */
-/* =========================================================
-   SETTINGS PANEL (native dialog)
-   ========================================================= */
-.settings-dialog {
+.settings-overlay {
   position: fixed;
-  top: 0;
-  right: 0;
-  left: auto;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s, visibility 0.25s;
+}
+
+.settings-overlay--open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.settings-panel {
   width: var(--settings-width);
   max-width: 90vw;
-  height: 100dvh;
-  max-height: 100dvh;
-  margin: 0;
-  margin-left: auto;
-  padding: 0;
-  border: none;
-  border-left: 1px solid var(--border);
-  background: var(--bg-surface);
-  color: var(--text-primary);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.settings-dialog::backdrop {
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(2px);
-}
-
-.settings-dialog__inner {
-  display: flex;
-  flex-direction: column;
   height: 100%;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
 }
 
-.settings-dialog[open] {
-  animation: slideInRight 0.3s cubic-bezier(0.4,0,0.2,1);
-}
-
-@keyframes slideInRight {
-  from { transform: translateX(100%); }
-  to   { transform: translateX(0); }
+.settings-overlay--open .settings-panel {
+  transform: translateX(0);
 }
 
 .settings__header {
@@ -1959,11 +1950,11 @@ pre {
 
 /* Fix settings panel z-index on mobile */
 @media (max-width: 768px) {
-  .settings-dialog { width: 100vw; max-width: 100vw; }
+  .settings-panel { width: 100vw; max-width: 100vw; }
 }
 
 /* Smooth transitions on theme change */
-body, .app-header, .side-nav, .settings-dialog,
+body, .app-header, .side-nav, .settings-panel,
 .stat-card, .action-card, .unit-tile, .unit-card,
 .feedback-card, .choice-btn {
   transition: background-color 0.25s, border-color 0.25s, color 0.25s;
@@ -2248,18 +2239,18 @@ body, .app-header, .side-nav, .settings-dialog,
 }
 
 /* Fix: ensure settings panel inputs are always interactive */
-.settings-dialog input,
-.settings-dialog textarea,
-.settings-dialog button,
-.settings-dialog select {
+.settings-panel input,
+.settings-panel textarea,
+.settings-panel button,
+.settings-panel select {
   position: relative;
   z-index: 1;
   pointer-events: auto;
   user-select: text;
   -webkit-user-select: text;
 }
-.settings-dialog input[type="password"],
-.settings-dialog input[type="text"] {
+.settings-panel input[type="password"],
+.settings-panel input[type="text"] {
   -webkit-appearance: none;
   appearance: none;
   touch-action: manipulation;

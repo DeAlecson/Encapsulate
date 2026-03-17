@@ -6,13 +6,9 @@ const App = (() => {
   const { $ } = Utils;
 
   const init = () => {
-    // 1. Initialise storage (creates defaults on first run)
     Storage.init();
-
-    // 2. Apply saved visual settings
     Settings.applyAll();
 
-    // 3. Register routes
     Router.register('/',         Renderer.dashboard);
     Router.register('/units',    (params) => {
       if (params && params.length > 0) {
@@ -28,17 +24,12 @@ const App = (() => {
     Router.register('/review',   Renderer.reviewVault);
     Router.register('/ai',       Renderer.aiStudio);
 
-    // 4. Start router
     Router.init();
 
-    // 5. Update gamification header
     Gamification.checkStreak();
     Gamification.refreshHeader();
 
-    // 6. Bind global UI events
     bindGlobalEvents();
-
-    // 7. Register service worker
     registerSW();
 
     console.log('Encapsulate v' + Storage.VERSION + ' initialised');
@@ -49,15 +40,19 @@ const App = (() => {
     const settingsBtn = $('#settings-toggle');
     if (settingsBtn) settingsBtn.onclick = Settings.toggle;
 
-    // Close settings
+    // Settings close button
     const closeBtn = $('#settings-close');
     if (closeBtn) closeBtn.onclick = Settings.close;
 
-    // Dialog close via Escape is handled natively by <dialog>
-    const settingsDialog = $('#settings-panel');
-    if (settingsDialog) {
-      settingsDialog.addEventListener('cancel', () => {
-        State.set('settingsOpen', false);
+    // Close settings when clicking the OVERLAY (dark area), NOT the panel
+    // e.target === overlay means the click landed on the dark background itself
+    // e.target === child means the click landed inside the panel — do nothing
+    const overlay = $('#settings-overlay');
+    if (overlay) {
+      overlay.addEventListener('mousedown', (e) => {
+        if (e.target === overlay) {
+          Settings.close();
+        }
       });
     }
 
@@ -73,7 +68,6 @@ const App = (() => {
       link.onclick = (e) => {
         e.preventDefault();
         Router.navigate(link.dataset.route);
-        // Close mobile nav
         const nav = $('#side-nav');
         if (nav) nav.classList.remove('nav--open');
       };
@@ -105,5 +99,4 @@ const App = (() => {
   return { init };
 })();
 
-/* ---------- Boot ---------- */
 document.addEventListener('DOMContentLoaded', App.init);
