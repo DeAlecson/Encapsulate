@@ -135,7 +135,12 @@ const PracticeEngine = (() => {
             <div class="editor-panel">
               <div class="editor-header">
                 <span class="editor-header__label">Your code</span>
-                <span class="editor-header__mode">${STRICTNESS[strictness]?.icon || ''} ${STRICTNESS[strictness]?.label || strictness}</span>
+                <span class="editor-header__mode">
+                  ${AI.isAvailable()
+                    ? '<span class="source-badge source-badge--ai" style="font-size:0.68rem">🤖 AI</span>'
+                    : '<span class="source-badge source-badge--offline" style="font-size:0.68rem">📋 Offline</span>'}
+                  ${STRICTNESS[strictness]?.icon || ''} ${STRICTNESS[strictness]?.label || strictness}
+                </span>
               </div>
               <div class="editor-wrapper">
                 <div class="line-numbers" id="line-numbers"></div>

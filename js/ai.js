@@ -5,8 +5,8 @@
 
 const AI = (() => {
   const API_URL = 'https://api.anthropic.com/v1/messages';
-  const MODEL = 'claude-sonnet-4-20250514';
-  const MAX_TOKENS = 1500;
+  const MODEL = 'claude-haiku-4-5-20251001';
+  const MAX_TOKENS = 1024;
   const TIMEOUT_MS = 30000;
 
   /* ---------- status tracking ---------- */

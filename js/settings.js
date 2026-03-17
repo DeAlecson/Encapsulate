@@ -47,18 +47,20 @@ const Settings = (() => {
               id="api-key-input"
               class="settings-input settings-input--mono"
               placeholder="sk-ant-..."
-              value="${Utils.escapeHTML(Storage.getApiKey())}"
               autocomplete="off"
+              spellcheck="false"
+              autocorrect="off"
+              autocapitalize="off"
             />
-            <button class="btn btn--small btn--ghost" id="api-key-toggle" title="Show/hide key">
+            <button class="btn btn--small btn--ghost" id="api-key-toggle" title="Show/hide key" type="button">
               👁
             </button>
           </div>
           <p class="settings-hint">Stored in sessionStorage only. Cleared on tab close.</p>
           <div class="settings-row__actions">
-            <button class="btn btn--small btn--primary" id="api-key-save">Save key</button>
-            <button class="btn btn--small btn--danger" id="api-key-clear" ${!hasKey ? 'disabled' : ''}>Clear key</button>
-            <button class="btn btn--small btn--secondary" id="api-key-test" ${!hasKey ? 'disabled' : ''}>Test connection</button>
+            <button class="btn btn--small btn--primary" id="api-key-save" type="button">Save key</button>
+            <button class="btn btn--small btn--danger" id="api-key-clear" type="button" ${!hasKey ? 'disabled' : ''}>Clear key</button>
+            <button class="btn btn--small btn--secondary" id="api-key-test" type="button" ${!hasKey ? 'disabled' : ''}>Test connection</button>
           </div>
           <div class="api-status-panel" id="api-status-panel">
             ${renderApiStatus()}
@@ -147,7 +149,14 @@ const Settings = (() => {
     const keySave = $('#api-key-save');
     const keyClear = $('#api-key-clear');
 
-    if (keyToggle) keyToggle.onclick = () => {
+    // Set value via JS property (not HTML attribute) to avoid escaping issues
+    if (keyInput) {
+      keyInput.value = Storage.getApiKey();
+    }
+
+    if (keyToggle) keyToggle.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       keyInput.type = keyInput.type === 'password' ? 'text' : 'password';
     };
 

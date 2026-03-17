@@ -2250,3 +2250,21 @@ body, .app-header, .side-nav, .settings-panel,
   .hub-grid { grid-template-columns: 1fr; }
   .mock-options { grid-template-columns: 1fr; }
 }
+
+/* Fix: ensure settings panel inputs are always interactive */
+.settings-panel input,
+.settings-panel textarea,
+.settings-panel button,
+.settings-panel select {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+}
+.settings-panel input[type="password"],
+.settings-panel input[type="text"] {
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
