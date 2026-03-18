@@ -1,5 +1,6 @@
 /* =========================================================
    settings.js — Settings panel for Encapsulate
+   API key, theme, strictness, font size, import/export
    ========================================================= */
 
 const Settings = (() => {
@@ -26,6 +27,7 @@ const Settings = (() => {
     State.get('settingsOpen') ? close() : open();
   };
 
+  /* ---------- render settings content ---------- */
   const render = () => {
     const container = $('#settings-content');
     if (!container) return;
@@ -34,25 +36,37 @@ const Settings = (() => {
     const hasKey = !!Storage.getApiKey();
 
     container.innerHTML = `
+      <!-- API Key -->
       <section class="settings-group">
         <h3 class="settings-group__title">AI Marking</h3>
         <div class="settings-row">
           <label class="settings-label" for="api-key-input">Anthropic API Key</label>
           <div class="api-key-row">
-            <input type="password" id="api-key-input" class="settings-input settings-input--mono"
-              placeholder="sk-ant-..." autocomplete="off" spellcheck="false" />
-            <button class="btn btn--small btn--ghost" id="api-key-toggle" title="Show/hide key" type="button">👁</button>
+            <input
+              type="password"
+              id="api-key-input"
+              class="settings-input settings-input--mono"
+              placeholder="sk-ant-..."
+              value="${Utils.escapeHTML(Storage.getApiKey())}"
+              autocomplete="off"
+            />
+            <button class="btn btn--small btn--ghost" id="api-key-toggle" title="Show/hide key">
+              👁
+            </button>
           </div>
           <p class="settings-hint">Stored in sessionStorage only. Cleared on tab close.</p>
           <div class="settings-row__actions">
-            <button class="btn btn--small btn--primary" id="api-key-save" type="button">Save key</button>
-            <button class="btn btn--small btn--danger" id="api-key-clear" type="button" ${!hasKey ? 'disabled' : ''}>Clear key</button>
-            <button class="btn btn--small btn--secondary" id="api-key-test" type="button" ${!hasKey ? 'disabled' : ''}>Test connection</button>
+            <button class="btn btn--small btn--primary" id="api-key-save">Save key</button>
+            <button class="btn btn--small btn--danger" id="api-key-clear" ${!hasKey ? 'disabled' : ''}>Clear key</button>
+            <button class="btn btn--small btn--secondary" id="api-key-test" ${!hasKey ? 'disabled' : ''}>Test connection</button>
           </div>
-          <div class="api-status-panel" id="api-status-panel">${renderApiStatus()}</div>
+          <div class="api-status-panel" id="api-status-panel">
+            ${renderApiStatus()}
+          </div>
         </div>
       </section>
 
+      <!-- Strictness -->
       <section class="settings-group">
         <h3 class="settings-group__title">Marking Strictness</h3>
         <div class="strictness-grid">
@@ -66,6 +80,7 @@ const Settings = (() => {
         </div>
       </section>
 
+      <!-- Theme -->
       <section class="settings-group">
         <h3 class="settings-group__title">Appearance</h3>
         <div class="settings-row">
@@ -92,14 +107,20 @@ const Settings = (() => {
         </div>
       </section>
 
+      <!-- Learning Mode -->
       <section class="settings-group">
         <h3 class="settings-group__title">Learning Mode</h3>
         <div class="toggle-group">
-          <button class="toggle-btn ${s.mode === 'guided' ? 'toggle-btn--active' : ''}" data-mode="guided">🗺️ Guided Path</button>
-          <button class="toggle-btn ${s.mode === 'explore' ? 'toggle-btn--active' : ''}" data-mode="explore">🔍 Free Explore</button>
+          <button class="toggle-btn ${s.mode === 'guided' ? 'toggle-btn--active' : ''}" data-mode="guided">
+            🗺️ Guided Path
+          </button>
+          <button class="toggle-btn ${s.mode === 'explore' ? 'toggle-btn--active' : ''}" data-mode="explore">
+            🔍 Free Explore
+          </button>
         </div>
       </section>
 
+      <!-- Data -->
       <section class="settings-group">
         <h3 class="settings-group__title">Data</h3>
         <div class="settings-row__actions">
@@ -118,17 +139,15 @@ const Settings = (() => {
     bindEvents();
   };
 
+  /* ---------- bind events ---------- */
   const bindEvents = () => {
+    // API key
     const keyInput = $('#api-key-input');
     const keyToggle = $('#api-key-toggle');
     const keySave = $('#api-key-save');
     const keyClear = $('#api-key-clear');
 
-    if (keyInput) keyInput.value = Storage.getApiKey();
-
-    if (keyToggle) keyToggle.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+    if (keyToggle) keyToggle.onclick = () => {
       keyInput.type = keyInput.type === 'password' ? 'text' : 'password';
     };
 
@@ -151,6 +170,7 @@ const Settings = (() => {
       render();
     };
 
+    // Test connection
     const keyTest = $('#api-key-test');
     if (keyTest) keyTest.onclick = async () => {
       keyTest.disabled = true;
@@ -169,48 +189,50 @@ const Settings = (() => {
       keyTest.textContent = 'Test connection';
     };
 
+    // Strictness
     $$('.strictness-card').forEach(btn => {
       btn.onclick = () => {
         Storage.updateSettings(s => s.strictness = btn.dataset.strict);
         toast(`Strictness: ${STRICTNESS[btn.dataset.strict].label}`, 'info');
-        $$('.strictness-card').forEach(b => b.classList.remove('strictness-card--active'));
-        btn.classList.add('strictness-card--active');
+        render();
       };
     });
 
+    // Theme
     $$('[data-theme]').forEach(btn => {
       btn.onclick = () => {
         Storage.updateSettings(s => s.theme = btn.dataset.theme);
         applyTheme(btn.dataset.theme);
-        $$('[data-theme]').forEach(b => b.classList.remove('toggle-btn--active'));
-        btn.classList.add('toggle-btn--active');
+        render();
       };
     });
 
+    // Font size
     $$('[data-fontsize]').forEach(btn => {
       btn.onclick = () => {
         Storage.updateSettings(s => s.fontSize = btn.dataset.fontsize);
         applyFontSize(btn.dataset.fontsize);
-        $$('[data-fontsize]').forEach(b => b.classList.remove('toggle-btn--active'));
-        btn.classList.add('toggle-btn--active');
+        render();
       };
     });
 
+    // Reduced motion
     const rmInput = $('#reduced-motion');
     if (rmInput) rmInput.onchange = () => {
       Storage.updateSettings(s => s.reducedMotion = rmInput.checked);
       applyReducedMotion(rmInput.checked);
     };
 
+    // Learning mode
     $$('[data-mode]').forEach(btn => {
       btn.onclick = () => {
         Storage.updateSettings(s => s.mode = btn.dataset.mode);
         toast(`Mode: ${btn.dataset.mode === 'guided' ? 'Guided Path' : 'Free Explore'}`, 'info');
-        $$('[data-mode]').forEach(b => b.classList.remove('toggle-btn--active'));
-        btn.classList.add('toggle-btn--active');
+        render();
       };
     });
 
+    // Export
     const exportBtn = $('#export-btn');
     if (exportBtn) exportBtn.onclick = () => {
       const data = Storage.exportData();
@@ -223,6 +245,7 @@ const Settings = (() => {
       toast('Progress exported', 'success');
     };
 
+    // Import
     const importInput = $('#import-input');
     if (importInput) importInput.onchange = (e) => {
       const file = e.target.files[0];
@@ -241,6 +264,7 @@ const Settings = (() => {
       reader.readAsText(file);
     };
 
+    // Reset
     const resetBtn = $('#reset-btn');
     if (resetBtn) resetBtn.onclick = () => {
       if (confirm('This will permanently erase all progress, settings, and saved data. Continue?')) {
@@ -251,9 +275,18 @@ const Settings = (() => {
     };
   };
 
-  const applyTheme = (theme) => document.documentElement.setAttribute('data-theme', theme);
-  const applyFontSize = (size) => document.documentElement.setAttribute('data-fontsize', size);
-  const applyReducedMotion = (on) => document.documentElement.classList.toggle('reduced-motion', on);
+  /* ---------- apply visual settings ---------- */
+  const applyTheme = (theme) => {
+    document.documentElement.setAttribute('data-theme', theme);
+  };
+
+  const applyFontSize = (size) => {
+    document.documentElement.setAttribute('data-fontsize', size);
+  };
+
+  const applyReducedMotion = (on) => {
+    document.documentElement.classList.toggle('reduced-motion', on);
+  };
 
   const applyAll = () => {
     const s = Storage.getSettings();
@@ -263,17 +296,20 @@ const Settings = (() => {
     State.set('apiKeyActive', !!Storage.getApiKey());
   };
 
+  /* ---------- API status indicator ---------- */
   const renderApiStatus = (overrideStatus, errorMsg) => {
     const hasKey = !!Storage.getApiKey();
     const online = navigator.onLine;
     let status = overrideStatus || (hasKey ? (online ? 'ready' : 'offline') : 'none');
+
     const states = {
-      none:    { cls: 'api-status--none',   icon: '○', text: 'No API key set — using offline marking' },
-      ready:   { cls: 'api-status--ready',  icon: '●', text: 'AI marking ready' },
-      offline: { cls: 'api-status--offline', icon: '◐', text: 'Offline — will use fallback' },
-      error:   { cls: 'api-status--error',  icon: '✗', text: errorMsg || AI.getLastError() || 'API error' },
-      loading: { cls: 'api-status--loading', icon: '◌', text: 'Connecting...' }
+      none:    { cls: 'api-status--none',    icon: '○', text: 'No API key set — using offline marking' },
+      ready:   { cls: 'api-status--ready',   icon: '●', text: 'AI marking ready' },
+      offline: { cls: 'api-status--offline',  icon: '◐', text: 'Offline — AI marking will use fallback' },
+      error:   { cls: 'api-status--error',   icon: '✗', text: errorMsg || AI.getLastError() || 'API error' },
+      loading: { cls: 'api-status--loading',  icon: '◌', text: 'Connecting...' }
     };
+
     const s = states[status] || states.none;
     return `<div class="api-status ${s.cls}">${s.icon} ${s.text}</div>`;
   };

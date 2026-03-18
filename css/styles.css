@@ -223,42 +223,55 @@ pre {
 }
 
 /* =========================================================
-   SETTINGS PANEL (overlay + panel)
-   The overlay IS the backdrop. The panel is a child inside it.
-   Clicking the overlay (dark area) closes. Clicking the panel does not.
+   SETTINGS PANEL (slide-in overlay)
    ========================================================= */
-.settings-overlay {
+.settings-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 300;
-  display: flex;
-  justify-content: flex-end;
   background: rgba(0,0,0,0.5);
+  z-index: 199;
   opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.25s, visibility 0.25s;
-}
-
-.settings-overlay--open {
-  opacity: 1;
-  visibility: visible;
+  pointer-events: none;
+  transition: opacity 0.25s;
 }
 
 .settings-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
   width: var(--settings-width);
   max-width: 90vw;
-  height: 100%;
+  height: 100dvh;
   background: var(--bg-surface);
   border-left: 1px solid var(--border);
+  z-index: 200;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  transform: translateX(100%);
-  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
 }
 
-.settings-overlay--open .settings-panel {
+.settings--open .settings-panel,
+.settings-panel.settings--open {
   transform: translateX(0);
+}
+
+.settings--open ~ .settings-backdrop,
+.settings-panel.settings--open + .settings-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Because we toggle on the panel itself, also handle backdrop: */
+body.settings-visible .settings-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.settings-panel.settings--open ~ .settings-backdrop {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .settings__header {
@@ -2236,22 +2249,4 @@ body, .app-header, .side-nav, .settings-panel,
   .hub-header { flex-direction: column; gap: 0.5rem; padding: 1rem; }
   .hub-grid { grid-template-columns: 1fr; }
   .mock-options { grid-template-columns: 1fr; }
-}
-
-/* Fix: ensure settings panel inputs are always interactive */
-.settings-panel input,
-.settings-panel textarea,
-.settings-panel button,
-.settings-panel select {
-  position: relative;
-  z-index: 1;
-  pointer-events: auto;
-  user-select: text;
-  -webkit-user-select: text;
-}
-.settings-panel input[type="password"],
-.settings-panel input[type="text"] {
-  -webkit-appearance: none;
-  appearance: none;
-  touch-action: manipulation;
 }
