@@ -147,11 +147,22 @@ pre {
   padding: 0.35rem 0.65rem;
   cursor: pointer;
   font-size: 0.85rem;
-  transition: border-color 0.2s, color 0.2s;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
 }
 .settings-btn:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+.settings-btn__icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+.settings-btn__label {
+  font-size: 0.85rem;
 }
 
 /* ---------- Sidebar Nav ---------- */
@@ -809,10 +820,26 @@ body.settings-visible .settings-backdrop {
   }
 
   .header__stats {
-    gap: 0.6rem;
+    gap: 0.5rem;
   }
 
   .xp-bar { width: 40px; }
+
+  /* Settings: icon-only on mobile */
+  .settings-btn {
+    border: none;
+    padding: 0.4rem;
+    border-radius: var(--radius-md);
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+  }
+  .settings-btn:hover {
+    background: var(--bg-hover);
+    border-color: transparent;
+  }
+  .settings-btn__label { display: none; }
+  .settings-btn__icon { font-size: 1.25rem; }
 
   .strictness-grid {
     grid-template-columns: 1fr;
@@ -821,7 +848,10 @@ body.settings-visible .settings-backdrop {
 
 @media (max-width: 480px) {
   .header__logo span { display: none; }
-  
+
+  /* Hide XP number — bar already communicates progress */
+  #header-xp { display: none; }
+
   .stat-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 0.5rem;
