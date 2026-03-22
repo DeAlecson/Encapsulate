@@ -194,7 +194,8 @@ const Settings = (() => {
       btn.onclick = () => {
         Storage.updateSettings(s => s.strictness = btn.dataset.strict);
         toast(`Strictness: ${STRICTNESS[btn.dataset.strict].label}`, 'info');
-        render();
+        $$('.strictness-card').forEach(b => b.classList.remove('strictness-card--active'));
+        btn.classList.add('strictness-card--active');
       };
     });
 
@@ -203,7 +204,8 @@ const Settings = (() => {
       btn.onclick = () => {
         Storage.updateSettings(s => s.theme = btn.dataset.theme);
         applyTheme(btn.dataset.theme);
-        render();
+        $$('[data-theme]').forEach(b => b.classList.remove('toggle-btn--active'));
+        btn.classList.add('toggle-btn--active');
       };
     });
 
@@ -212,7 +214,8 @@ const Settings = (() => {
       btn.onclick = () => {
         Storage.updateSettings(s => s.fontSize = btn.dataset.fontsize);
         applyFontSize(btn.dataset.fontsize);
-        render();
+        $$('[data-fontsize]').forEach(b => b.classList.remove('toggle-btn--active'));
+        btn.classList.add('toggle-btn--active');
       };
     });
 
@@ -228,7 +231,8 @@ const Settings = (() => {
       btn.onclick = () => {
         Storage.updateSettings(s => s.mode = btn.dataset.mode);
         toast(`Mode: ${btn.dataset.mode === 'guided' ? 'Guided Path' : 'Free Explore'}`, 'info');
-        render();
+        $$('[data-mode]').forEach(b => b.classList.remove('toggle-btn--active'));
+        btn.classList.add('toggle-btn--active');
       };
     });
 
