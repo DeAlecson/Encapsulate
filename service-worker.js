@@ -2,7 +2,7 @@
    service-worker.js — Offline cache for Encapsulate
    ========================================================= */
 
-const CACHE_NAME = 'encapsulate-v6';
+const CACHE_NAME = 'encapsulate-v7';
 
 const STATIC_ASSETS = [
   './',
@@ -47,6 +47,9 @@ const STATIC_ASSETS = [
   './data/coding/su4_coding.json'
 ];
 
+/* App-shell file extensions that should always be fresh */
+const isAppShell = (url) => /\.(html|js|css)(\?.*)?$/.test(url.pathname) || url.pathname.endsWith('/');
+
 /* Install — cache static assets */
 self.addEventListener('install', (e) => {
   e.waitUntil(
@@ -67,7 +70,7 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-/* Fetch — cache-first for static, network-first for API */
+/* Fetch — network-first for app shell, cache-first for data */
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
 
@@ -83,11 +86,24 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // Cache-first for everything else
+  // Network-first for HTML/JS/CSS — ensures fresh code after each deploy
+  if (isAppShell(url)) {
+    e.respondWith(
+      fetch(e.request).then(response => {
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
+        }
+        return response;
+      }).catch(() => caches.match(e.request))
+    );
+    return;
+  }
+
+  // Cache-first for data files (JSON assets)
   e.respondWith(
     caches.match(e.request).then(cached => {
       return cached || fetch(e.request).then(response => {
-        // Cache new static resources
         if (response.ok && e.request.method === 'GET') {
           const clone = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
@@ -95,7 +111,6 @@ self.addEventListener('fetch', (e) => {
         return response;
       });
     }).catch(() => {
-      // Offline fallback for navigation
       if (e.request.mode === 'navigate') {
         return caches.match('./index.html');
       }
